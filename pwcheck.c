@@ -17,33 +17,48 @@ typedef int bool;
  * 8. vypsani statistik
  */
 
-// /* pomocna fce */
-// bool hasLowerChar(char *pw) {
-
-// }
-
-// /* pomocna fce */
-// bool hasUpperChar(char *pw) {
-
-// }
-
-// /* pomocna fce */
-// bool hasNumber(char *pw) {
-
-// }
-
-// /* pomocna fce */
-// bool hasSpecial(char *pw) {
-
-// }
-
-bool level1(char *pw, int param) {
-   bool hasLowerChar, hasUpperChar = false;
+/* pomocna fce */
+bool hasLower(char *pw) {
+   bool hasLowerChar = false;
    for (int i = 0; pw[i] != 0; i++) {
       if (pw[i] >= 'a' && pw[i] <= 'z') hasLowerChar = true;
+   }
+   return hasLowerChar;
+}
+
+/* pomocna fce */
+bool hasUpper(char *pw) {
+   bool hasUpperChar = false;
+   for (int i = 0; pw[i] != 0; i++) {
       if (pw[i] >= 'A' && pw[i] <= 'Z') hasUpperChar = true;
    }
-   if ((hasLowerChar == true) && (hasUpperChar == true)) {
+   return hasUpperChar;
+}
+
+/* pomocna fce */
+bool hasNum(char *pw) {
+   bool hasNumber = false;
+   for (int i = 0; pw[i] != 0; i++) {
+      if (pw[i] >= '0' && pw[i] <= '9') hasNumber = true;
+   }
+   return hasNumber;
+}
+
+// /* pomocna fce */
+bool hasSpecial(char *pw) {
+   bool hasSpecialChar = false;
+   for (int i = 0; pw[i] != 0; i++) {
+      if (((((pw[i] >= 32) && (pw[i] <= 47)) || ((pw[i] >= 58) && (pw[i] <= 64))) || ((pw[i] >= 91) && (pw[i] <= 96))) || ((pw[i] >= 123 && pw[i] <= 126))) {
+         hasSpecialChar = true;
+      }
+   }
+   return hasSpecialChar;
+}
+
+
+
+bool level1(char *pw, int param) {
+   if ((hasLower(pw) == true) && (hasUpper(pw) == true)) {
       return true;
    } else {
       printf("%s nesplňuje 1. úroveň bezpečnosti.\n", pw);
@@ -52,6 +67,28 @@ bool level1(char *pw, int param) {
 }
 
 bool level2(char* pw, int param) {
+   switch (param) {
+      case 1:
+         if (hasLower(pw)) {
+            return true;
+         }
+         break;
+      case 2:
+         if (hasLower(pw) && hasUpper(pw)) {
+            return true;
+         }
+         break;
+      case 3:
+         if ((hasLower(pw) && hasUpper(pw)) && hasNum(pw)) {
+            return true;
+         }
+         break;
+      case 4:
+         if (((hasLower(pw) && hasUpper(pw)) && hasNum(pw)) && hasSpecial(pw)) {
+            return true;
+         }
+         break;
+   }
    return false;
 }
 
@@ -71,7 +108,9 @@ bool over_heslo(char *pw, int level, int param) {
          }
          break;
       case 2:
-         printf("Hm, level 2 a níž.\n");
+         if (level2(pw, param)) {
+            return true;
+         }
          break;
       case 3:
          printf("Ou, level 3 a níž.\n");
