@@ -17,10 +17,58 @@ typedef int bool;
  * 8. vypsani statistik
  */
 
-bool over_heslo(char* pw, int level, int param) {
+// /* pomocna fce */
+// bool hasLowerChar(char *pw) {
+
+// }
+
+// /* pomocna fce */
+// bool hasUpperChar(char *pw) {
+
+// }
+
+// /* pomocna fce */
+// bool hasNumber(char *pw) {
+
+// }
+
+// /* pomocna fce */
+// bool hasSpecial(char *pw) {
+
+// }
+
+bool level1(char *pw, int param) {
+   bool hasLowerChar, hasUpperChar = false;
+   for (int i = 0; pw[i] != 0; i++) {
+      if (pw[i] >= 'a' && pw[i] <= 'z') hasLowerChar = true;
+      if (pw[i] >= 'A' && pw[i] <= 'Z') hasUpperChar = true;
+   }
+   if ((hasLowerChar == true) && (hasUpperChar == true)) {
+      return true;
+   } else {
+      printf("%s nesplňuje 1. úroveň bezpečnosti.\n", pw);
+      return false;
+   }
+}
+
+bool level2(char* pw, int param) {
+   return false;
+}
+
+bool level3(char* pw, int param) {
+   return false;
+}
+
+bool level4(char* pw, int param) {
+   return false;
+}
+
+bool over_heslo(char *pw, int level, int param) {
    switch (level) {
       case 1:
-         printf("Cajk, level 1 a níž.\n");
+         if (level1(pw, param)) {
+            return true;
+         }
          break;
       case 2:
          printf("Hm, level 2 a níž.\n");
@@ -32,7 +80,7 @@ bool over_heslo(char* pw, int level, int param) {
          printf("Safra, level 4 a níž.\n");
          break;
    }
-   return true;
+   return false;
 }
 
 int main(int argc, char **argv) {
@@ -78,8 +126,9 @@ int main(int argc, char **argv) {
             strncat(heslo, &znak, 1);
          } else {
             // 4. ted mam ulozene jednotlive heslo, tak ho 5. overim
-            over_heslo(heslo, UROVEN, PARAM);
-            printf("%s\n", heslo);
+            if (over_heslo(heslo, UROVEN, PARAM) == true) {
+               printf("%s\n", heslo);
+            }
             heslo[0] = '\0';
          }
       }
