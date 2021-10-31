@@ -17,6 +17,15 @@ typedef int bool;
  * 8. vypsani statistik
  */
 
+void updatuj_statistiky(char *pw) {
+
+}
+
+void vypis_statistiky(int min, int max, int avg) {
+
+   return;
+}
+
 /* pomocna fce */
 bool hasLower(char *pw) {
    bool hasLowerChar = false;
@@ -56,7 +65,6 @@ bool hasSpecial(char *pw) {
 }
 
 
-
 bool level1(char *pw, int param) {
    if ((hasLower(pw) == true) && (hasUpper(pw) == true)) {
       return true;
@@ -92,8 +100,44 @@ bool level2(char* pw, int param) {
    return false;
 }
 
+
+// bool level3(char* pw, int param) {
+//    int nalezenyPocetStejnychZnaku = 0;
+//    bool nalezeno = false;
+//    for (int i = 0; pw[i] != 0; i++) {
+//       int j = i+1; 
+//       while (pw[j] != 0) {
+//          if (pw[i] == pw[j]) {
+//             nalezenyPocetStejnychZnaku++; 
+//             if (nalezenyPocetStejnychZnaku == param) {
+//                nalezeno = true;
+//             } else {
+//                nalezenyPocetStejnychZnaku = 0;
+//                break;
+//             }
+//          }
+//       }
+//    }
+//    if (nalezeno == true) {
+//       return false;
+//    } else return true;
+// }
+
 bool level3(char* pw, int param) {
-   return false;
+   int nalezenyPocetStejnychZnaku = 0;
+   bool nalezeno = true;
+   for (int i = 0; pw[i] != 0; i++) {
+      for (int j = i; pw[i] != pw[j]; j++) {
+         nalezenyPocetStejnychZnaku++; 
+         if (nalezenyPocetStejnychZnaku == param) {
+            nalezeno = false;
+         } else {
+            nalezenyPocetStejnychZnaku = 0;
+            break;
+         }
+      }
+   }
+   return nalezeno;
 }
 
 bool level4(char* pw, int param) {
@@ -108,12 +152,14 @@ bool over_heslo(char *pw, int level, int param) {
          }
          break;
       case 2:
-         if (level2(pw, param)) {
+         if (level2(pw, param) && level1(pw, param)) {
             return true;
          }
          break;
       case 3:
-         printf("Ou, level 3 a níž.\n");
+         if ((level3(pw, param) && level2(pw, param)) && level1(pw, param)) {
+            return true;
+         }
          break;
       case 4:
          printf("Safra, level 4 a níž.\n");
@@ -167,9 +213,13 @@ int main(int argc, char **argv) {
             // 4. ted mam ulozene jednotlive heslo, tak ho 5. overim
             if (over_heslo(heslo, UROVEN, PARAM) == true) {
                printf("%s\n", heslo);
+               updatuj_statistiky(heslo);
             }
             heslo[0] = '\0';
          }
+      }
+      if (PRINT_STATS) {
+         vypis_statistiky();
       }
    /* KONEC CTENI JEDNOTLIVYCH HESEL*/
    return 0;
